@@ -28,7 +28,7 @@ const Hero = ({ trending }: HeroProps): JSX.Element => {
 				/>
 			</div>
 
-			<div className='py-[4px] px-[8px] bg-[#1d1d1d]/50 w-[111px] text-center rounded-bl-[8px] rounded-tr-[8px]'>
+			<div className='py-[4px] px-[8px] bg-[#e5e5e5]/50 w-[111px] text-center rounded-bl-[8px] rounded-tr-[8px]'>
 				{movie?.media_type}
 			</div>
 

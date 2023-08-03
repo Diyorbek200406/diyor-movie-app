@@ -20,7 +20,7 @@ const Header = () => {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
 	return (
-		<header className={`${scrolled && 'bg-[#e10856] shadow-lg'}`}>
+		<header className={`${scrolled && 'bg-[#E10856] shadow-lg'}`}>
 			<div className='flex items-center space-x-2 md:space-x-10'>
 				<Image
 					src='/logo.svg'
