@@ -1,18 +1,37 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { TextField } from 'src/components';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { AuthContext } from 'src/context/auth.context';
+import { useRouter } from 'next/router';
 
 const Auth = () => {
 	const [auth, setAuth] = useState<'signup' | 'signin'>('signin');
+
+	const { error, isLoading, signpIn, signpUp, user } = useContext(AuthContext);
+
+	const router = useRouter();
+
+	if (user) router.push('/');
+	if (!isLoading)
+		return (
+			<>
+				<h1>Loading...</h1>
+			</>
+		);
+
 	const toggleAuth = (state: 'signup' | 'signin') => {
 		setAuth(state);
 	};
 
 	const onSubmit = (formData: { email: string; password: string }) => {
-		console.log(formData);
+		if (auth === 'signup') {
+			signpUp(formData.email, formData.password);
+		} else {
+			signpIn(formData.email, formData.password);
+		}
 	};
 
 	const validation = Yup.object({
@@ -20,7 +39,7 @@ const Auth = () => {
 			.email('Enter valid email')
 			.required('Email is required'),
 		password: Yup.string()
-			.min(4, '4 minimum character')
+			.min(6, '6 minimum character')
 			.required('Password is required'),
 	});
 
@@ -61,26 +80,25 @@ const Auth = () => {
 					<h1 className='text-4xl font-semibold'>
 						{auth === 'signup' ? 'Sign Up' : 'Sign In'}
 					</h1>
+					{error && (
+						<p className='text-red-500 font-semibold text-center'>{error}</p>
+					)}
 					<div className='space-y-4'>
 						<TextField name='email' placeholder='Email' type='email' />
 						<TextField name='password' placeholder='Password' type='password' />
 					</div>
 
-					{auth === 'signin' ? (
-						<button
-							type='submit'
-							className='w-full bg-[#E10856] py-3 mt-4 font-semibold'
-						>
-							Sign In
-						</button>
-					) : (
-						<button
-							type='submit'
-							className='w-full bg-[#E10856] py-3 mt-4 font-semibold'
-						>
-							Sign Up
-						</button>
-					)}
+					<button
+						type='submit'
+						disabled={isLoading}
+						className='w-full bg-[#E10856] py-3 mt-4 font-semibold'
+					>
+						{isLoading
+							? 'Loading...'
+							: auth === 'signin'
+							? 'Sign In'
+							: 'Sign Up'}
+					</button>
 
 					{auth === 'signin' ? (
 						<div className='text-[gray]'>
