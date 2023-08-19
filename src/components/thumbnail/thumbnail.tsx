@@ -2,10 +2,18 @@ import ReactStars from 'react-stars';
 import { image_base } from '../helpers/constants';
 import { ThumbnailProps } from './thumbnail.props';
 import Image from 'next/image';
+import { useInfoStore } from 'src/store';
 
 const Thumbnail = ({ movie, isBig = false }: ThumbnailProps) => {
+	const { setModel, setCurrentMovie } = useInfoStore();
+
+	const handleCurrentMovie = () => {
+		setModel(true);
+		setCurrentMovie(movie);
+	};
 	return (
 		<div
+			onClick={handleCurrentMovie}
 			className={`relative ${
 				isBig
 					? 'h-[400px] md:h-[550px] min-w-[350px] md:min-w-[470px]'

@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { image_base } from '../helpers/constants';
 import { TbPlayerPlay } from 'react-icons/tb';
 import ReactStars from 'react-stars';
+import { useInfoStore } from 'src/store';
 
 const Hero = ({ trending }: HeroProps): JSX.Element => {
+	const { setModel, setCurrentMovie } = useInfoStore();
 	const [movie, setMovie] = useState<IMovie>({} as IMovie);
 
 	// useEffect
@@ -15,6 +17,11 @@ const Hero = ({ trending }: HeroProps): JSX.Element => {
 
 		setMovie(randomMovie);
 	}, [trending]);
+
+	const handleCurrentMovie = () => {
+		setModel(true);
+		setCurrentMovie(movie);
+	};
 
 	// return
 	return (
@@ -52,7 +59,10 @@ const Hero = ({ trending }: HeroProps): JSX.Element => {
 			</p>
 
 			<div>
-				<button className='bg-white/60 flex justify-center space-x-2 items-center font-bold text-black  w-[200px] h-[56px] rounded-full'>
+				<button
+					onClick={handleCurrentMovie}
+					className='bg-white/60 hover:bg-white/80 flex justify-center space-x-2 items-center font-bold text-black  w-[200px] h-[56px] rounded-full'
+				>
 					<TbPlayerPlay className='h-5 w-5 md:h-6 md:w-6' /> Watch Now
 				</button>
 			</div>
