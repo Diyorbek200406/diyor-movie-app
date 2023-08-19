@@ -5,6 +5,7 @@ import { Header, Hero, Row } from 'src/components';
 import { AuthContext } from 'src/context/auth.context';
 import { IMovie } from 'src/interfaces/app.interface';
 import { API_REQUEST } from 'src/services/api.service';
+import { useInfoStore } from 'src/store';
 
 export default function Home({
 	trending,
@@ -16,6 +17,9 @@ export default function Home({
 	family,
 	history,
 }: HomeProps): JSX.Element {
+	const { setModel, modal } = useInfoStore();
+	console.log(modal);
+
 	const { isLoading } = useContext(AuthContext);
 
 	if (isLoading) return <>{null}</>;
@@ -41,6 +45,7 @@ export default function Home({
 					<Row title='History' movies={history} />
 				</section>
 			</main>
+			<button onClick={() => setModel(true)}>click</button>
 		</div>
 	);
 }

@@ -19,7 +19,8 @@
 		"react-stars": "^2.2.5",
 		"tailwind-scrollbar-hide": "^1.1.7",
 		"typescript": "5.1.6",
-		"yup": "^1.2.0"
+		"yup": "^1.2.0",
+		"zustand": "^4.4.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.4.5",
