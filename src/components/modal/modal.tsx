@@ -1,6 +1,6 @@
 import MuiModal from '@mui/material/Modal';
 import { useInfoStore } from 'src/store';
-import { FaPlay, FaTimes } from 'react-icons/fa';
+import { FaPause, FaPlay, FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { Element } from 'src/interfaces/app.interface';
 import ReactPlayer from 'react-player';
@@ -12,6 +12,7 @@ const Modal = () => {
 	const { modal, setModel, currentMovie } = useInfoStore();
 	const [trailer, setTrailer] = useState<string>('');
 	const [muted, setMuted] = useState<boolean>(true);
+	const [playing, setPlaying] = useState<boolean>(true);
 
 	const base_url = process.env.NEXT_PUBLIC_API_DOMAIN as string;
 	const api_key = process.env.NEXT_PUBLIC_API_KEY as string;
@@ -59,16 +60,27 @@ const Modal = () => {
 						url={`http://www.youtube.com/watch?v=${trailer}`}
 						width={'100%'}
 						height={'100%'}
-						playing
+						playing={playing}
 						style={{ position: 'absolute', top: '0', left: '0' }}
 						muted={muted}
-						controls
 					/>
 					<div className='absolute bottom-10 flex w-full justify-between items-center px-16'>
 						<div className='flex space-x-2'>
-							<button className='flex items-center gap-x-2 py-4 rounded bg-white px-8 text-xl font-bold text-black transition hover:bg-[#e6e6e6]'>
-								<FaPlay className='w-7 h-7 text-black' />
-								Play
+							<button
+								onClick={() => setPlaying(prev => !prev)}
+								className='flex items-center gap-x-2 py-2 rounded bg-white px-8 text-xl font-bold text-black transition hover:bg-[#e6e6e6]'
+							>
+								{playing ? (
+									<>
+										<FaPause className='w-6 h-6 text-black' />
+										Pause
+									</>
+								) : (
+									<>
+										<FaPlay className='w-6 h-6 text-black' />
+										Play
+									</>
+								)}
 							</button>
 							<button className='modalButton'>
 								<BiPlus />

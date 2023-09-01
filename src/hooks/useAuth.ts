@@ -30,7 +30,7 @@ export const useAuth = () => {
 	const signpIn = async (email: string, password: string) => {
 		setIsLoading(true);
 
-		await createUserWithEmailAndPassword(auth, email, password)
+		await signInWithEmailAndPassword(auth, email, password)
 			.then(res => {
 				setUser(res.user);
 				router.push('/');

@@ -15,7 +15,7 @@ const Auth = () => {
 	const router = useRouter();
 
 	if (user) router.push('/');
-	if (!isLoading)
+	if (isLoading)
 		return (
 			<>
 				<h1>Loading...</h1>
