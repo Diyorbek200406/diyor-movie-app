@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "src/hooks/useAuth";
 const Auth = () => {
   const [auth, setAuth] = useState<"signup" | "signin">("signin");
-  const { error, isLoading, signpIn, signpUp, user, setIsLoading } = useAuth();
+  const { error, isLoading, signIn, signUp, user, setIsLoading } = useAuth();
   const router = useRouter();
   if (user) router.push("/");
   if (isLoading) return <h1>Loading...</h1>;
@@ -25,9 +25,9 @@ const Auth = () => {
       });
       await response.json();
 
-      signpUp(formData.email, formData.password);
+      signUp(formData.email, formData.password);
     } else {
-      signpIn(formData.email, formData.password);
+      signIn(formData.email, formData.password);
     }
   };
   const validation = Yup.object({

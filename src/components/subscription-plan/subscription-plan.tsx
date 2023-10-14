@@ -14,7 +14,7 @@ const SubscriptionPlan = ({ products }: subscriptionPlanProps) => {
       </div>
       <div className="flex flex-col space-y-2 text-center pt-5">
         <h1 className="text-2xl md:text-5xl text-shadow-sm">Flexible pricing for teams of any size.</h1>
-        <p className="text-xl text-shadow">Relaxing with watchin your favourite movies and tv.</p>
+        <p className="text-xl text-shadow">Relaxing with watching your favorite movies and tv.</p>
       </div>
       <div className="flex justify-center items-center py-20">
         <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 space-y-4 md:space-y-0">

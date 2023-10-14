@@ -7,23 +7,23 @@ interface AuthContextState {
   user: User | null;
   error: string;
   isLoading: boolean;
-  signpUp: (email: string, password: string) => Promise<void>;
-  signpIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
 }
 export const AuthContext = createContext<AuthContextState>({
   user: null,
   error: "",
   isLoading: false,
-  signpIn: async () => {},
-  signpUp: async () => {},
+  signIn: async () => {},
+  signUp: async () => {},
   logOut: async () => {},
 });
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [initialLoader, setInitialLoader] = useState<boolean>(true);
-  const { error, isLoading, logOut, signpIn, signpUp, setUser, user, setIsLoading } = useAuth();
+  const { error, isLoading, logOut, signIn, signUp, setUser, user, setIsLoading } = useAuth();
   const router = useRouter();
-  const value = useMemo(() => ({ user, isLoading, error, signpIn, signpUp, logOut }), [user, isLoading, error]);
+  const value = useMemo(() => ({ user, isLoading, error, signIn, signUp, logOut }), [user, isLoading, error]);
   useEffect(
     () =>
       onAuthStateChanged(auth, (user) => {

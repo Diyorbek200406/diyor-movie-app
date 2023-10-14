@@ -7,7 +7,7 @@ export const useAuth = () => {
   const [error, setError] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  const signpUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string) => {
     setIsLoading(true);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
@@ -18,7 +18,7 @@ export const useAuth = () => {
       .catch((error) => setError(error.message))
       .finally(() => setIsLoading(false));
   };
-  const signpIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     await signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
@@ -36,5 +36,5 @@ export const useAuth = () => {
       .catch((error) => setError(error.message))
       .finally(() => setIsLoading(false));
   };
-  return { error, isLoading, user, signpIn, signpUp, logOut, setUser, setIsLoading };
+  return { error, isLoading, user, signIn, signUp, logOut, setUser, setIsLoading };
 };

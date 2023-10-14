@@ -5,14 +5,14 @@ import { AiOutlineSearch, AiOutlineUser, AiOutlineLogout } from "react-icons/ai"
 import { BiBellMinus } from "react-icons/bi";
 import { AuthContext } from "src/context/auth.context";
 const Header = () => {
-  const [scrolled, setscrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { logOut } = useContext(AuthContext);
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setscrolled(true);
+        setScrolled(true);
       } else {
-        setscrolled(false);
+        setScrolled(false);
       }
     };
     window.addEventListener("scroll", handleScroll);
