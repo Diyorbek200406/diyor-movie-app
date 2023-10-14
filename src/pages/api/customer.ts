@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const { method } = req;
   if (method == "POST") {
     try {
-      await stripe.customers.create({ email: req.body.email });
+      await stripe.customers.create({ email: req.body.email, metadata: { user_id: req.body.user_id } });
       return res.status(200).json({ message: "success" });
     } catch (error) {
       const result = error as Error;

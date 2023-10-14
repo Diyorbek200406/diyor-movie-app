@@ -11,4 +11,5 @@ export const API_REQUEST = {
   family: `${base_url}/discover/movie?api_key=${api_key}&language=en-US&with_genre=10751&page=3`,
   history: `${base_url}/discover/movie?api_key=${api_key}&language=en-US&with_genre=36&page=4`,
   products: `${PUBLIC_DOMAIN}/api/products`,
+  subscription: `${PUBLIC_DOMAIN}/api/subscription`,
 };

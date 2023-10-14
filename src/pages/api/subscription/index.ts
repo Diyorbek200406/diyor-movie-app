@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY as string, { apiVersion: "2023-08-16" });
@@ -7,12 +6,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (method == "POST") {
     try {
       const public_domain = process.env.NEXT_PUBLIC_DOMAIN as string;
-
       const { email, priceId } = req.body;
       const customers = await stripe.customers.list({ limit: 100 });
-
       const customer = customers.data.find((e) => e.email === email);
-
       const subscription = await stripe.checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
