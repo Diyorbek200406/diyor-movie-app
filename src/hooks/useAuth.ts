@@ -41,8 +41,9 @@ export const useAuth = () => {
     setIsLoading(true);
     await signOut(auth)
       .then(() => {
-        setUser(null);
         Cookies.remove("d-movie-user-token");
+        setUser(null);
+        router.push("/auth");
       })
       .catch((error) => setError(error.message))
       .finally(() => setIsLoading(false));

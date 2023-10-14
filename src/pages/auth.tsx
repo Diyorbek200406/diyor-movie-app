@@ -4,14 +4,11 @@ import { useState } from "react";
 import { TextField } from "src/components";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useRouter } from "next/router";
 import { useAuth } from "src/hooks/useAuth";
+import { GetServerSideProps } from "next";
 const Auth = () => {
   const [auth, setAuth] = useState<"signUp" | "signIn">("signIn");
-  const { error, isLoading, signIn, signUp, user, setIsLoading } = useAuth();
-  const router = useRouter();
-  if (user) router.push("/");
-  if (isLoading) return <h1>Loading...</h1>;
+  const { error, isLoading, signIn, signUp } = useAuth();
   const toggleAuth = (state: "signUp" | "signIn") => {
     setAuth(state);
   };
@@ -67,5 +64,15 @@ const Auth = () => {
     </div>
   );
 };
-
 export default Auth;
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const user_id = req.cookies["d-movie-user-token"];
+  if (user_id) {
+    return {
+      redirect: { destination: "/", permanent: false },
+    };
+  }
+  return {
+    props: {},
+  };
+};
