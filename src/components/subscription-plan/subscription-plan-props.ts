@@ -1,4 +1,5 @@
 import { Product } from "src/interfaces/app.interface";
-export interface subscriptionPlanProps {
+
+export interface SubscriptionPlanProps {
   products: Product[];
 }
