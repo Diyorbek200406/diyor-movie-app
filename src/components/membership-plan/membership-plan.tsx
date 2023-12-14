@@ -7,12 +7,15 @@ const MembershipPlan = ({ subscription }: MembershipPlanProps) => {
 
   const openPortal = async () => {
     setIsLoading(true);
-    const payload = { user_id: subscription.customer.metadata.user_id };
+    const paylaod = { user_id: subscription.customer.metadata.user_id };
 
-    const response = await fetch("/api/subscription/manage", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const response = await fetch("/api/subscription/manage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(paylaod),
+    });
 
     const data = await response.json();
-
     window.open(data.portal);
     setIsLoading(false);
   };
@@ -49,12 +52,11 @@ const MembershipPlan = ({ subscription }: MembershipPlanProps) => {
                   ? subscription.default_payment_method.card.brand
                   : subscription.customer.invoice_settings.default_payment_method.card.brand}
               </span>
-              **** **** ****
+              **** **** ****{" "}
               {subscription.default_payment_method
                 ? subscription.default_payment_method.card.last4
                 : subscription.customer.invoice_settings.default_payment_method.card.last4}
             </div>
-
             <p className="mt-4">Your next billing date is {moment(subscription.current_period_end * 1000).format("DD MMM, yyyy")}</p>
           </div>
           <div className="md:text-right">
