@@ -22,7 +22,7 @@ export default function Home({ trending, topRated, tvTopRated, popular, document
         <section>
           <Row title="Top Rated" movies={topRated} />
           <Row title="TV Show" movies={tvTopRated} isBig={true} />
-          {list.length && <Row title="My List" movies={list} />}
+          {list.length ? <Row title="My List" movies={list} /> : null}
           <Row title="Popular" movies={popular} />
           <Row title="Documentary" movies={documentary} />
           <Row title="Comedy" movies={comedy} isBig={true} />
