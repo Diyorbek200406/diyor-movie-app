@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineSearch, AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
 import { BiBellMinus } from "react-icons/bi";
 import { useAuth } from "src/hooks/useAuth";
+import NavMenu from "../nav-menu/nav-menu";
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const { logOut } = useAuth();
@@ -22,6 +23,7 @@ const Header = () => {
     <header className={`${scrolled && "bg-[#141414] shadow-lg"}`}>
       <div className="flex items-center space-x-2 md:space-x-10">
         <Image src="/logo.svg" alt="logo" width={56} height={56} priority className="cursor-pointer object-contain" />
+        <NavMenu />
         <ul className="space-x-4 md:flex hidden">
           <li className="navLink">Home</li>
           <li className="navLink">Movies</li>
