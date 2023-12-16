@@ -1,14 +1,13 @@
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { Header, Hero, Modal, Row, SubscriptionPlan } from "src/components";
-import { IMovie, Product } from "src/interfaces/app.interface";
+import { getList } from "src/helpers/lists";
+import { IMovie, MyList, Product } from "src/interfaces/app.interface";
 import { API_REQUEST } from "src/services/api.service";
 import { useInfoStore } from "src/store";
-export default function Home({ trending, topRated, tvTopRated, popular, documentary, comedy, family, history, products, subscription }: HomeProps): JSX.Element {
+export default function Home({ trending, topRated, tvTopRated, popular, documentary, comedy, family, history, products, subscription, list }: HomeProps): JSX.Element {
   const { modal } = useInfoStore();
-  if (!subscription.length) {
-    return <SubscriptionPlan products={products} />;
-  }
+  if (!subscription.length) return <SubscriptionPlan products={products} />;
   return (
     <div className={`relative min-h-screen ${modal && "!h-screen overflow-hidden"}`}>
       <Head>
@@ -23,6 +22,7 @@ export default function Home({ trending, topRated, tvTopRated, popular, document
         <section>
           <Row title="Top Rated" movies={topRated} />
           <Row title="TV Show" movies={tvTopRated} isBig={true} />
+          {list.length && <Row title="My List" movies={list} />}
           <Row title="Popular" movies={popular} />
           <Row title="Documentary" movies={documentary} />
           <Row title="Comedy" movies={comedy} isBig={true} />
@@ -36,9 +36,7 @@ export default function Home({ trending, topRated, tvTopRated, popular, document
 }
 export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req }) => {
   const user_id = req.cookies["d-movie-user-token"];
-  if (!user_id) {
-    return { redirect: { destination: "/auth", permanent: false } };
-  }
+  if (!user_id) return { redirect: { destination: "/auth", permanent: false } };
   const [trending, topRated, tvTopRated, popular, documentary, comedy, family, history, products, subscription] = await Promise.all([
     fetch(API_REQUEST.trending).then((res) => res.json()),
     fetch(API_REQUEST.top_rated).then((res) => res.json()),
@@ -51,20 +49,8 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async ({ req })
     fetch(API_REQUEST.products).then((res) => res.json()),
     fetch(`${API_REQUEST.subscription}/${user_id}`).then((res) => res.json()),
   ]);
-  return {
-    props: {
-      trending: trending.results,
-      topRated: topRated.results,
-      tvTopRated: tvTopRated.results,
-      popular: popular.results,
-      documentary: documentary.results,
-      comedy: comedy.results,
-      family: family.results,
-      history: history.results,
-      products: products.products.data,
-      subscription: subscription.subscription.data,
-    },
-  };
+  const myList: MyList[] = await getList(user_id);
+  return { props: { trending: trending.results, topRated: topRated.results, tvTopRated: tvTopRated.results, popular: popular.results, documentary: documentary.results, comedy: comedy.results, family: family.results, history: history.results, products: products.products.data, subscription: subscription.subscription.data, list: myList.map((e) => e.product) } };
 };
 interface HomeProps {
   trending: IMovie[];
@@ -77,4 +63,5 @@ interface HomeProps {
   history: IMovie[];
   products: Product[];
   subscription: string[];
+  list: IMovie[];
 }

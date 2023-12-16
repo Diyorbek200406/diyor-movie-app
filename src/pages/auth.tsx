@@ -1,17 +1,16 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
-import { TextField } from "src/components";
+import { GetServerSideProps } from "next";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { TextField } from "src/components";
 import { useAuth } from "src/hooks/useAuth";
-import { GetServerSideProps } from "next";
 const Auth = () => {
   const [auth, setAuth] = useState<"signUp" | "signIn">("signIn");
   const { error, isLoading, signIn, signUp } = useAuth();
-  const toggleAuth = (state: "signUp" | "signIn") => {
-    setAuth(state);
-  };
+  const toggleAuth = (state: "signUp" | "signIn") => setAuth(state);
+
   const onSubmit = async (formData: { email: string; password: string }) => {
     if (auth === "signUp") {
       signUp(formData.email, formData.password);
@@ -67,12 +66,6 @@ const Auth = () => {
 export default Auth;
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user_id = req.cookies["d-movie-user-token"];
-  if (user_id) {
-    return {
-      redirect: { destination: "/", permanent: false },
-    };
-  }
-  return {
-    props: {},
-  };
+  if (user_id) return { redirect: { destination: "/", permanent: false } };
+  return { props: {} };
 };

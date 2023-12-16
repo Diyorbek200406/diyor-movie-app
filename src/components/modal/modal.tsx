@@ -1,43 +1,51 @@
 import MuiModal from "@mui/material/Modal";
 import { useInfoStore } from "src/store";
 import { FaPause, FaPlay, FaTimes } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Element } from "src/interfaces/app.interface";
 import ReactPlayer from "react-player";
 import { BiPlus } from "react-icons/bi";
 import { BsVolumeMute, BsVolumeDown } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
-
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "src/firebase";
+import { AuthContext } from "src/context/auth.context";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 const Modal = () => {
   const { modal, setModel, currentMovie } = useInfoStore();
   const [trailer, setTrailer] = useState<string>("");
   const [muted, setMuted] = useState<boolean>(true);
   const [playing, setPlaying] = useState<boolean>(true);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
   const base_url = process.env.NEXT_PUBLIC_API_DOMAIN as string;
   const api_key = process.env.NEXT_PUBLIC_API_KEY as string;
-
   const api = `${base_url}/${currentMovie?.media_type === "tv" ? "tv" : "movie"}/${currentMovie.id}/videos?api_key=${api_key}&language=en-US`;
-
-  const handleClose = () => {
-    setModel(false);
-  };
-
+  const handleClose = () => setModel(false);
   useEffect(() => {
     const fetchVideoData = async () => {
       const data = await fetch(api).then((res) => res.json());
-
       if (data?.results) {
         const index = data.results.findIndex((el: Element) => el.type === "Trailer");
         setTrailer(data?.results[index]?.key);
       }
     };
-
     fetchVideoData();
-
     // eslint-disable-next-line
   }, [currentMovie]);
-
+  const addProductList = async () => {
+    setIsLoading(true);
+    try {
+      await addDoc(collection(db, "list"), { userId: user?.uid, product: currentMovie });
+      setIsLoading(false);
+      router.replace(router.asPath);
+      toast.success("Successfully added");
+    } catch (e) {
+      setIsLoading(false);
+    }
+  };
   return (
     <MuiModal open={modal} onClose={handleClose} className={"fixed !top-7 left-0 right-0 z-50 mx-auto w-full max-w-5xl overflow-hidden overflow-y-scroll scrollbar-hide"}>
       <>
@@ -46,20 +54,10 @@ const Modal = () => {
         </button>
 
         <div className="relative pt-[55%]">
-          <ReactPlayer
-            url={`https://www.youtube.com/watch?v=${trailer}`}
-            width={"100%"}
-            height={"100%"}
-            playing={playing}
-            style={{ position: "absolute", top: 0, left: 0 }}
-            muted={muted}
-          />
+          <ReactPlayer url={`https://www.youtube.com/watch?v=${trailer}`} width={"100%"} height={"100%"} playing={playing} style={{ position: "absolute", top: 0, left: 0 }} muted={muted} />
           <div className="absolute bottom-10 left-10 right-10 flex w-full items-center justify-between px-18">
             <div className="flex space-x-2">
-              <button
-                onClick={() => setPlaying((prev) => !prev)}
-                className="flex items-center gap-x-2 rounded bg-white px-8 py-2 text-xl font-bold text-black transition hover:bg-[#e6e6e6]"
-              >
+              <button onClick={() => setPlaying((prev) => !prev)} className="flex items-center gap-x-2 rounded bg-white px-8 py-2 text-xl font-bold text-black transition hover:bg-[#e6e6e6]">
                 {playing ? (
                   <>
                     <FaPause />
@@ -72,8 +70,8 @@ const Modal = () => {
                   </>
                 )}
               </button>
-              <button className="modalButton">
-                <BiPlus className="w-7 h-7" />
+              <button className="modalButton" onClick={addProductList}>
+                {isLoading ? "..." : <BiPlus className="w-7 h-7" />}
               </button>
               <button className="modalButton">
                 <AiOutlineLike className="w-7 h-7" />

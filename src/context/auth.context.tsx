@@ -11,15 +11,7 @@ interface AuthContextState {
   signIn: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
 }
-export const AuthContext = createContext<AuthContextState>({
-  user: null,
-  error: "",
-  isLoading: false,
-  signIn: async () => {},
-  signUp: async () => {},
-  logOut: async () => {},
-});
-
+export const AuthContext = createContext<AuthContextState>({ user: null, error: "", isLoading: false, signIn: async () => {}, signUp: async () => {}, logOut: async () => {} });
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [initialLoader, setInitialLoader] = useState<boolean>(true);
   const { error, isLoading, logOut, signIn, signUp, setUser, user, setIsLoading } = useAuth();

@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import moment from "moment";
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineSubscriptions } from "react-icons/md";
 import { MembershipPlan } from "src/components";
 import { Subscription } from "src/interfaces/app.interface";
 import { API_REQUEST } from "src/services/api.service";
-import moment from "moment";
-import { GetServerSideProps } from "next";
 import { useAuth } from "src/hooks/useAuth";
 
 const Account = ({ subscription }: AccountProps) => {
@@ -65,16 +65,13 @@ const Account = ({ subscription }: AccountProps) => {
 export default Account;
 
 export const getServerSideProps: GetServerSideProps<AccountProps> = async ({ req }) => {
-  const user_id = req.cookies.user_id;
-  if (!user_id) {
-    return { redirect: { destination: "/auth", permanent: false } };
-  }
+  const user_id = req.cookies["d-movie-user-token"];
+
+  if (!user_id) return { redirect: { destination: "/auth", permanent: false } };
 
   const subscription = await fetch(`${API_REQUEST.subscription}/${user_id}`).then((res) => res.json());
 
-  if (!subscription.subscription.data.length) {
-    return { redirect: { destination: "/", permanent: false } };
-  }
+  if (!subscription.subscription.data.length) return { redirect: { destination: "/", permanent: false } };
 
   return { props: { subscription: subscription.subscription.data[0] } };
 };
